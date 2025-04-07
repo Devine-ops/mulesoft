@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<sub-flow name="register-subflow" doc:id="79108245-0967-46e2-92a5-e8116de4d346" >
+		<logger level="INFO" doc:name="Logger" doc:id="938dc9de-5eba-4ceb-aa7b-5f90fc980d3b" message="Inicio da criação de cliente"/>
+		<http:request method="POST" doc:name="Request" doc:id="1c4e8579-eac7-4c93-a8dd-c198aabc7f0f" config-ref="ASAAS" path="/v3/customers">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	access_token : "\$aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OjA4MzI4NTk1LTEwZmQtNGY3ZS1iNjcyLTQ1NzViYjFlOWI4MTo6JGFhY2hfMTJhMDE1ZGEtNDYyOC00ODRjLWI5ZjAtM2VmODg2OGJiYTkz"
+}]]]></http:headers>
+		</http:request>
+	</sub-flow>
+
+
+</mule>

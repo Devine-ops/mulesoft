@@ -1,0 +1,684 @@
+#%RAML 1.0
+title: api-assas
+baseUri: https://api-sandbox.asaas.com/v3/customers
+
+/v3/customers:
+  post:
+    description: "Essa rota da API para criar um novo cliente."
+    headers:
+      access_token:
+        required: true
+        type: string
+        example: "chave-api-exemplo-123"
+    body:
+      application/json:
+        type: object
+        properties:
+          name:
+            type: string
+            required: true
+            example: "Vinicius"
+          cpfCnpj:
+            type: string
+            required: true
+            example: "000.000.000-00"
+          email:
+            type: string
+            required: false
+            example: "jhondoe@gmail.com"
+          phone:
+            type: string
+            required: false
+            example: "Telefone fixo"
+          mobilePhone:
+            type: string
+            required: false
+            example: "Telefone celular"
+          address:
+            type: string
+            required: false
+            example: "Logradouro"
+          addressNumber:
+            type: string
+            required: false
+            example: "Número de endereço"
+          complement:
+            type: string
+            required: false
+            maxLength: 255
+            example: "Complemento do endereço (máx. 255 caracteres)"
+          province:
+            type: string
+            required: false
+            example: "Bairro"
+          postalCode:
+            type: string
+            required: false
+            example: "CEP do endereço"
+          externalReference:
+            type: string
+            required: false
+            example: "Identificador do cliente no seu sistema"
+          notificationDisable:
+            type: boolean
+            required: false
+            example: true
+          additionalEmails:
+            type: string
+            required: false
+            example: "Emails adicionais para envio de notificações"
+          municipalInscription:
+            type: string
+            required: false
+            example: "Inscrição municipal do cliente"
+          stateInscription:
+            type: string
+            required: false
+            example: "Inscrição estadual do cliente"
+          observations:
+            type: string
+            required: false
+            example: "Observações adicionais"  
+          groupName:
+            type: string
+            required: false
+            example: "Nome do grupo ao qual o cliente pertence"
+          company:
+            type: string
+            required: false
+            example: "Nome da empresa"
+          foreingCustomer:
+            type: boolean
+            required: false
+            example: false
+    responses:
+      201:
+        body:
+          application/json:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: cus_9897666 
+      400:
+        body:
+          application/json:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+                required: true
+              message:
+                example: Bad request
+                type: string
+                required: true
+              description:
+                example: "O campo name deve ser informado"
+            example:
+              {
+                "code":400,
+                "message":"Bad request",
+                "description":"O campo name deve ser informado",
+              }
+      401:
+        body:
+          application/json:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+                required: true
+              message:
+                type: string
+                example: "Não autorizado"
+                required: true
+            example:
+              {
+                "code":401,
+                "message":"Não autorizado"
+              }
+  get:
+    description: Requisição de usada para listar clientes
+    headers:
+      access_token:
+        required: true
+        type: string
+        example: "chave-api-exemplo-123"
+    queryParameters:
+      offset:
+        type: integer
+        required: false
+        example: 2
+      limit:
+        type: integer
+        required: false
+        minimum: 1
+        maximum: 100
+        example: 4
+      name:
+        type: string
+        required: false
+        example: Fulano
+      email:
+        type: string
+        required: false
+        example: fulano@gmail.com
+      cpfCnpj:
+        type: string
+        required: false
+        example: 000.000.000-00
+      groupName: 
+        type: string
+        required: false
+        example: Bons pagadores
+      externalReference:
+        type: string
+        required: false
+        example: "Filtrar pelo Identificador do seu sistema"
+    responses:
+      200:
+        body:
+          application/json:
+              type: object
+              properties:
+                object:
+                  type: string
+                  example: list
+                hasMore:
+                  type: boolean
+                  example: false
+                totalCount:
+                  type: integer
+                  example: 3
+                limit:
+                  type: integer
+                  example: 10
+                offset:
+                  type: integer
+                  example: 0
+                data:
+                  description: Lista de objetos
+                  type: array
+                  required: false
+                  items:
+                    properties:
+                      object: 
+                        type: string
+                        required: false
+                        example: customer
+                      id:
+                        type: string
+                        example: cus_936837
+                        required: false
+                      dateCreated:
+                        type: string
+                        required: false
+                        example: 2025-04-03
+                      name:
+                        type: string
+                        required: false 
+                        example: Ciclano
+                      email:
+                        type: string
+                        required: false
+                        example: fulano@gmail.com
+                      phone: 
+                        type: string 
+                        required: false
+                        example: "61995479000"
+                      mobilePhone:
+                        type: string
+                        required: false
+                        example: "61995479000"
+                      address:
+                        type: string
+                        required: false
+                        example: Qs 612
+                      addressNumber:
+                        type: string
+                        required: false
+                        example: "102"
+                      complement:
+                        type: string
+                        required: false
+                        example: apartamento
+                      province: 
+                        type: string
+                        required: false
+                        example: Asa norte
+                      city:
+                        type: string
+                        required: false
+                        example: "52365"
+                      cityName:
+                        type: string
+                        required: false
+                        example: Brasilia
+                      state:
+                        type: string
+                        required: false
+                        example: DF
+                      country:
+                        type: string
+                        required: false
+                        example: Brasil
+                      postalCode:
+                        type: string
+                        required: false
+                        example: "72310509"
+                      cpfCnpj:
+                        type: string
+                        required: false
+                        example: "00000000000"
+                      personType:
+                        type: string
+                        required: false
+                        example: fisica ou juridica
+                      deleted:
+                        type: boolean 
+                        required: false
+                        example: true
+                      additinalEmails:
+                        type: string
+                        required: false
+                        example: fulano2@gmail.com
+                      extenalReference:
+                        type: string
+                        required: false
+                        example: "5892"
+                      notificationDisable:
+                        type: boolean
+                        required: false
+                        example: false
+                      observations:
+                        type: string
+                        required: false
+                        example: Mal pagador
+                      foreingCustomer:
+                        type: boolean
+                        required: false
+                        example: true
+      401:
+        body:
+          application/json:
+            description: Nao autorizado
+            type: object
+            properties:
+              code:
+                type: integer
+                required: false
+                example: 401
+              message: 
+                type: string
+                required: false
+                example: Unauthorized
+      403:
+        body:
+          application/json:
+            description: Ocorre quando o body esta preenchido
+            type: object
+            properties:
+              code: 
+                type: integer
+                required: false
+                example: 403
+              message:
+                type: string
+                required: false
+                example: Forbidden
+  /{id}:
+    get:
+      description: Rota para listar cliente por ID
+      headers:
+        access_token:
+          required: true
+          type: string
+          example: "chave-api-exemplo-123"
+      queryParameters:
+        id:
+          type: string
+          required: true
+          example: cus_9375938
+      body:
+        application/json:
+          type: object
+          properties:
+            id:
+              type: string
+              required: true 
+              example: cus_567389
+      responses:
+        200:
+          body:
+            application/json:
+              type: object
+              properties:
+                object: 
+                  type: string
+                  required: false
+                  example: customer
+                id:
+                  type: string
+                  example: cus_936837
+                  required: false
+                dateCreated:
+                  type: string
+                  required: false
+                  example: 2025-04-03
+                name:
+                  type: string
+                  required: false 
+                  example: Ciclano
+                email:
+                  type: string
+                  required: false
+                  example: fulano@gmail.com
+                phone: 
+                  type: string 
+                  required: false
+                  example: "61995479000"
+                mobilePhone:
+                  type: string
+                  required: false
+                  example: "61995479000"
+                address:
+                  type: string
+                  required: false
+                  example: Qs 612
+                addressNumber:
+                  type: string
+                  required: false
+                  example: "102"
+                complement:
+                  type: string
+                  required: false
+                  example: apartamento
+                province: 
+                  type: string
+                  required: false
+                  example: Asa norte
+                city:
+                  type: string
+                  required: false
+                  example: "52365"
+                cityName:
+                  type: string
+                  required: false
+                  example: Brasilia
+                state:
+                  type: string
+                  required: false
+                  example: DF
+                country:
+                  type: string
+                  required: false
+                  example: Brasil
+                postalCode:
+                    type: string
+                    required: false
+                    example: "72310509"
+                cpfCnpj:
+                  type: string
+                  required: false
+                  example: "00000000000"
+                personType:
+                  type: string
+                  required: false
+                  example: fisica ou juridica
+                deleted:
+                  type: boolean 
+                  required: false
+                  example: true
+                additinalEmails:
+                  type: string
+                  required: false
+                  example: fulano2@gmail.com
+                extenalReference:
+                  type: string
+                  required: false
+                  example: "5892"
+                notificationDisable:
+                  type: boolean
+                  required: false
+                  example: false
+                observations:
+                  type: string
+                  required: false
+                  example: Mal pagador
+                foreingCustomer:
+                  type: boolean
+                  required: false
+                  example: true
+        401:
+          body:
+            application/json:
+              description: Nao autorizado
+              type: object
+              properties:
+                code:
+                  type: integer
+                  required: false
+                  example: 401
+                message: 
+                  type: string
+                  required: false
+                  example: Unauthorized
+        403:
+          body:
+            application/json:
+              description: Ocorre quando o body esta preenchido
+              type: object
+              properties:
+                code: 
+                  type: integer
+                  required: false
+                  example: 403
+                message:
+                  type: string
+                  required: false
+                  example: Forbidden
+        404:
+          body:
+            application/json:
+              description: Ocorre quando não encontra um usuario 
+              type: object
+              properties:
+                code:
+                  type: integer
+                  required: false
+                  example: 404
+                message:
+                  type: string
+                  required: false
+                  example: Cliente não encontrado
+    put:
+      description: Rota para atualizar um cliente
+      headers:
+        access_token:
+          required: true
+          type: string
+          example: "chave-api-exemplo-123"
+      queryParameters:
+        id:
+          type: string
+          required: true
+          example: cus_9375938
+      body:
+        application/json:
+          type: object
+          properties:
+            name:
+              type: string
+              required: true
+              example: "Vinicius"
+            cpfCnpj:
+              type: string
+              required: true
+              example: "000.000.000-00"
+            email:
+              type: string
+              required: false
+              example: "jhondoe@gmail.com"
+            phone:
+              type: string
+              required: false
+              example: "Telefone fixo"
+            mobilePhone:
+              type: string
+              required: false
+              example: "Telefone celular"
+            address:
+              type: string
+              required: false
+              example: "Logradouro"
+            addressNumber:
+              type: string
+              required: false
+              example: "Número de endereço"
+            complement:
+              type: string
+              required: false
+              maxLength: 255
+              example: "Complemento do endereço (máx. 255 caracteres)"
+            province:
+              type: string
+              required: false
+              example: "Bairro"
+            postalCode:
+              type: string
+              required: false
+              example: "CEP do endereço"
+            externalReference:
+              type: string
+              required: false
+              example: "Identificador do cliente no seu sistema"
+            notificationDisable:
+              type: boolean
+              required: false
+              example: true
+            additionalEmails:
+              type: string
+              required: false
+              example: "Emails adicionais para envio de notificações"
+            municipalInscription:
+              type: string
+              required: false
+              example: "Inscrição municipal do cliente"
+            stateInscription:
+              type: string
+              required: false
+              example: "Inscrição estadual do cliente"
+            observations:
+              type: string
+              required: false
+              example: "Observações adicionais"  
+            groupName:
+              type: string
+              required: false
+              example: "Nome do grupo ao qual o cliente pertence"
+            company:
+              type: string
+              required: false
+              example: "Nome da empresa"
+            foreingCustomer:
+              type: boolean
+              required: false
+              example: false
+      responses:
+        200:
+          body:
+            application/json:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      required: false
+                      example: cus_9897666
+                    message:
+                      type: string
+                      required: false
+                      example: Cliente atualizado com sucesso
+        401:
+          body:
+            application/json:
+              description: Nao autorizado
+              type: object
+              properties:
+                code:
+                  type: integer
+                  required: false
+                  example: 401
+                message: 
+                  type: string
+                  required: false
+                  example: Unauthorized                 
+        404:
+          body:
+            application/json:
+              description: Ocorre quando não encontra um usuario 
+              type: object
+              properties:
+                code:
+                  type: integer
+                  required: false
+                  example: 404
+                message:
+                  type: string
+                  required: false
+                  example: Cliente não encontrado       
+    delete:
+      description: Rota para deletar um cliente
+      headers:
+        access_token:
+          required: true
+          type: string
+          example: "chave-api-exemplo-123"
+      queryParameters:
+        id:
+          type: string
+          required: true
+          example: cus_9375938
+      responses:
+        200:
+          body:
+            application/json:
+              type: object
+              properties:
+                deleted:
+                  type: boolean
+                  required: false
+                  example: true
+                id:
+                  type: string
+                  required: false
+                  example: cus_378399
+        401:
+          body:
+            application/json:
+              description: Nao autorizado
+              type: object
+              properties:
+                code:
+                  type: integer
+                  required: false
+                  example: 401
+                message: 
+                  type: string
+                  required: false
+                  example: Unauthorized       
+        404:
+          body:
+            application/json:
+              description: Ocorre quando não encontra um usuario 
+              type: object
+              properties:
+                code:
+                  type: integer
+                  required: false
+                  example: 404
+                message:
+                  type: string
+                  required: false
+                  example: Cliente não encontrado
