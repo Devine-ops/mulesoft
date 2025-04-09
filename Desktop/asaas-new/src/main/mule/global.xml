@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+	<http:listener-config name="api-assas-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8080"/>
+    </http:listener-config>
+    <http:request-config name="ASAAS" doc:name="HTTP Request configuration" doc:id="4cf309c1-28ea-4b11-888b-8b982611a572" >
+		<http:request-connection host="api-sandbox.asaas.com" port="443" protocol="HTTPS"/>
+	</http:request-config>
+    <apikit:config name="api-assas-config" api="api-assas.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+
+</mule>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	
+	<sub-flow name="subflow-list" doc:id="b94e1906-6080-4796-8728-e3a286cc9f4c" >
+		<logger level="INFO" doc:name="Logger" doc:id="da9f034a-b6d9-4850-baa1-3e9330e6f8f8" message="bateu aqui"/>
+		<http:request method="GET" doc:name="Request" doc:id="382b8b93-a8ed-42af-be45-214effaa678e" config-ref="ASAAS" path="/v3/customers">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	access_token : "\$aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OjA4MzI4NTk1LTEwZmQtNGY3ZS1iNjcyLTQ1NzViYjFlOWI4MTo6JGFhY2hfMTJhMDE1ZGEtNDYyOC00ODRjLWI5ZjAtM2VmODg2OGJiYTkz"
+}]]]></http:headers>
+		</http:request>
+	</sub-flow>
+
+</mule>
