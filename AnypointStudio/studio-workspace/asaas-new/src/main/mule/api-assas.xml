@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <flow name="api-assas-main">
+        <http:listener path="/api/*" config-ref="api-assas-httpListenerConfig">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="api-assas-config" />
+		<error-handler ref="apikit-error-handler" />
+        
+    </flow>
+    <flow name="api-assas-console">
+        <http:listener config-ref="api-assas-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="api-assas-config" />
+		<error-handler ref="console-error-handler" />
+        
+    </flow>
+    <flow name="put:\v3\customers\(id):application\json:api-assas-config" doc:id="d6228849-2667-4871-b765-7ab501c3135f">
+		<ee:transform doc:name="Transform Message" doc:id="10d7c133-3f35-4390-94f4-fa6321300a55">
+			<ee:variables>
+				<ee:set-variable variableName="id"><![CDATA[attributes.uriParams.'id']]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="6c28f127-af39-475a-8100-ddce73acd848" message="put:\v3\customers\(id):application\json:api-assas-config" />
+		<logger level="INFO" message="put:\v3\customers\(id):application\json:api-assas-config" />
+		<flow-ref doc:name="Flow Reference" doc:id="2edf65aa-5aad-494c-8f9f-8c031ada5ad8" name="update-subflow" />
+		<error-handler ref="asaas-error-handler" />
+	</flow>
+	<flow name="get:\v3\customers:api-assas-config">
+        <logger level="INFO" message="get:\v3\customers:api-assas-config" />
+		<flow-ref doc:name="Flow Reference" doc:id="59179363-b7bb-427c-b71c-7fe8538ccbdd" name="subflow-list" />
+		<logger level="INFO" doc:name="Logger" doc:id="ce47bb8c-9381-4fae-9bc7-09f87fdb7da8" message="listou"/>
+		<error-handler ref="asaas-error-handler" />
+    </flow>
+	<flow name="get:\v3\customers\(id):api-assas-config">
+        <ee:transform doc:name="Transform Message">
+            <ee:variables>
+                <ee:set-variable variableName="id">attributes.uriParams.'id'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <logger level="INFO" message="get:\v3\customers\(id):application\json:api-assas-config" />
+		<flow-ref doc:name="Flow Reference" doc:id="70dae5bf-8cc3-4879-8714-a9e68c7bb56f" name="list-id-subflow"/>
+		<error-handler ref="asaas-error-handler" />
+    </flow>
+	<flow name="delete:\v3\customers\(id):api-assas-config" doc:id="db71d3da-1ae6-4a60-b419-bf991ae86074" >
+		<ee:transform doc:name="Transform Message" doc:id="8424afc5-31a2-4b12-ba73-41c0eefbb803" >
+			<ee:variables >
+				<ee:set-variable variableName="id" ><![CDATA[attributes.uriParams.'id']]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="ed30a3cd-fc44-4bb0-b0d0-a7ab2237135b" message="delete:\v3\customers\(id):api-assas-config" />
+		<flow-ref doc:name="Flow Reference" doc:id="984e1879-aabb-4df2-8ef0-a86d6511ca0d" name="delete-subflow"/>
+		<error-handler ref="asaas-error-handler" />
+	</flow>
+	<flow name="post:\v3\customers:application\json:api-assas-config" doc:id="a2528ada-e225-43ae-af3c-917f18095460" >
+		<ee:transform doc:name="Transform Message" doc:id="92948fbb-e301-44e9-997b-736b998b8238" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	name: payload.name,
+	cpfCnpj: payload.cpfCnpj
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="89f748b0-dc01-416d-ab19-a7c2f5c2ffe0" name="register-subflow" />
+		<error-handler ref="asaas-error-handler" />
+	</flow>
+</mule>

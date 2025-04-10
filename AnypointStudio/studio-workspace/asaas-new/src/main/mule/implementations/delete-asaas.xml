@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<sub-flow name="delete-subflow" doc:id="40b83ab4-fbbf-47f2-a30b-30b96b7b0171" >
+		<http:request method="DELETE" doc:name="Request" doc:id="ad9509ea-7f9b-4092-98b6-92f9f7a7ccc5" config-ref="ASAAS" path="/v3/customers/{id}">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	access_token : "\$aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OjA4MzI4NTk1LTEwZmQtNGY3ZS1iNjcyLTQ1NzViYjFlOWI4MTo6JGFhY2hfMTJhMDE1ZGEtNDYyOC00ODRjLWI5ZjAtM2VmODg2OGJiYTkz"
+}]]]></http:headers>
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	id : vars.id
+}]]]></http:uri-params>
+		</http:request>
+		<logger level="INFO" doc:name="Logger" doc:id="2464c251-7fa6-412c-856d-5bf93636bc7c" message="deletado"/>
+	</sub-flow>
+
+</mule>
