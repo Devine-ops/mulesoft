@@ -10,6 +10,12 @@ http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/
 				<jms:queue-consumer />
 			</jms:consumer-type>
 		</jms:listener>
-		<logger level="INFO" doc:name="Logger" doc:id="fabb149b-1b94-4c87-8f5e-1af767ee37ea" message="#[payload]"/>
+		<set-variable value="#[payload]" variableName="recebedor" doc:name="Definir Fila de Destino" />
+		<jms:consume doc:name="Consume" doc:id="38535d1f-8ff2-4e97-9895-0400a32e4f9c" config-ref="JMS_Config" contentType="application/json" maximumWait="5" maximumWaitUnit="SECONDS" destination="#[vars.recebedor]">
+			<jms:consumer-type>
+				<jms:queue-consumer />
+			</jms:consumer-type>
+		</jms:consume>
+		<logger level="INFO" doc:name="Logger" doc:id="c70b1fcf-ef66-4067-8590-42bca536fa17" message="#[payload]" />
 	</flow>
 </mule>
