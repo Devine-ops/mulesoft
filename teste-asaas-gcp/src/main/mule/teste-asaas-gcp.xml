@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:pubsub="http://www.mulesoft.org/schema/mule/pubsub"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+        http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+        http://www.mulesoft.org/schema/mule/pubsub http://www.mulesoft.org/schema/mule/pubsub/current/mule-pubsub.xsd
+        http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+
+	<!-- Configuração do Google Pub/Sub -->
+	<pubsub:config name="Google_Pub_Sub_Configuration"
+		doc:name="Google Pub Sub Configuration"
+		doc:id="5a173fbc-fa49-4018-b5f3-b5c4eeff42f0"
+		projectId="coastal-mesh-418221" topicName="teste-asaas">
+		<pubsub:connection
+			clientEmail="${privatekey.id}"
+			privateKeyId="${privatekey.id}"
+			clientId="${privatekey.id}">
+			<pubsub:private-key><![CDATA[-----BEGIN PRIVATE KEY-----
+${privatekey.id}
+-----END PRIVATE KEY-----]]></pubsub:private-key>
+		</pubsub:connection>
+	</pubsub:config>
+
+	<!-- Configuração do Listener HTTP -->
+	<http:listener-config name="HTTP_Listener_config"
+		doc:name="HTTP Listener config">
+		<http:listener-connection host="0.0.0.0"
+			port="8081" />
+	</http:listener-config>
+
+	<!-- Flow para publicar no tópico -->
+	<flow name="publish-to-topic-flow">
+		<http:listener doc:name="Listener"
+			config-ref="HTTP_Listener_config" path="/publishToTopic" />
+
+		 <ee:transform doc:name="Build PubSub Message Payload">
+        <ee:message>
+            <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+
+  {
+    data: payload.message,
+    attributes: {
+      origem: "mulesoft"
+    }
+  }
+
+]]></ee:set-payload>
+        </ee:message>
+    </ee:transform>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="fc611352-51d6-4106-b969-0ae47f73086d" />
+		<pubsub:publish-message
+			doc:name="Publish Message" config-ref="Google_Pub_Sub_Configuration"
+			projectId="coastal-mesh-418221" topicName="teste-asaas"
+			doc:id="564065e9-8d08-40d7-9c48-ae842d9e5f89" >
+			<pubsub:message ><![CDATA[#[payload]]]></pubsub:message>
+		</pubsub:publish-message>
+
+		<logger level="INFO" doc:name="Logger"
+			message="Mensagem publicada no tópico 'teste-asaas'" />
+
+		<ee:transform doc:name="Transform Message">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "message": "Message published to topic"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	
+</flow>
+	<flow name="teste-asaas-gcpFlow1" doc:id="4572489c-5558-4cd1-9515-255da163a290" >
+		<scheduler doc:name="Scheduler" doc:id="ee62e45a-bb3b-49ec-a686-302204a1e39c" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="1" timeUnit="MINUTES"/>
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="0879aac4-04f9-4baf-8db6-a946af6847c0" message="passou pelo scheduler"/>
+		<flow-ref doc:name="Flow Reference" doc:id="6796e473-661b-43ed-a726-0c76c054a525" name="teste-asaas-gcpFlow"/>
+	</flow>
+	<flow name="teste-asaas-gcpFlow" doc:id="8d158049-405c-4e33-856e-3a5c841b24f6" >
+		<pubsub:message-listener doc:name="On message listener" doc:id="777cc477-3f5f-4387-931a-1a1bbfc1ed64" config-ref="Google_Pub_Sub_Configuration" projectId="coastal-mesh-418221" subscriptionName="asaas"/>
+		<logger level="INFO" doc:name="Logger" doc:id="b22928f1-27fd-448f-9b24-412750bef4b1" message="#[payload]"/>
+	</flow>
+
+
+</mule>
