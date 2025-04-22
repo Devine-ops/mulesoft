@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="02a1e038-6a78-4911-9ade-e85ba4cf759c" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="b8954733-9d83-4e9a-80e4-8e6f115c992a" />
+	<flow name="read-and-write-excel-fileFlow" doc:id="75df9fa4-d4fd-4a6e-8ef0-697c07d72717" >
+		<http:listener doc:name="Listener" doc:id="f9c620aa-43e7-46b6-8879-298dc54e5f20" config-ref="HTTP_Listener_config" path="/excel"/>
+		<logger level="INFO" doc:name="Logger" doc:id="9a21ec24-2d51-4877-b02c-ebda018883ca" message="Start"/>
+		<file:read doc:name="Read" doc:id="8532beb8-57ec-401e-aa70-e9c5a29a34e5" config-ref="File_Config" path="C:\Users\Global Red 1\Downloads\cvd-cases.csv"/>
+		<logger level="INFO" doc:name="Logger" doc:id="4fb7f233-99b1-4bff-b10e-3b30dd922800" message="Read"/>
+		<ee:transform doc:name="Transform Message" doc:id="4a8ec545-8cb0-48d6-b7d8-e3b7dc555059" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xlsx
+---
+{
+	cases: payload map ( payload01 , indexOfPayload01 ) -> {
+		name: payload01."first-name",
+		email: payload01.email,
+		source: payload01.source,
+		"case-type": payload01."case-type",
+		dob: payload01.dob
+	},
+	contact: [{
+		email: payload.email,
+		"first-name": payload."first-name",
+		"last-name": payload."last-name",
+		phone: payload.phone
+	}]
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<sftp:write doc:name="Write" doc:id="74dcbc61-6eaf-4761-899a-2eff8f2b5ede" config-ref="SFTP_Config" path='#["/teste/upload" ++ now() as String ++ ".xlsx"]'/>
+		<logger level="INFO" doc:name="Logger" doc:id="708e6dd2-c1bf-4d3e-8baa-ce54d90c8e70" message="Write"/>
+	</flow>
+</mule>

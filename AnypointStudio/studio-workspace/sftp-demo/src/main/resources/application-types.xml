@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="csv-covid" format="csv">
+      <types:shape format="weave"><![CDATA[%dw 2.0
+
+type csv_covid = Array<{|  source: String,   "case-type": String,   "first-name": String,   "last-name": String,   phone: String,   email: String,   dob: String,   "national-id": String,   "street-address": String,   city: String,   state: String,   postal: String,   country: String|}> {"header": "true",
+"headerLineNumber": "0",
+"isQuotedString": "false"}
+
+]]></types:shape>
+      <types:properties>
+        <types:property name="headerLineNumber" value="0"/>
+        <types:property name="header" value="true"/>
+        <types:property name="isQuotedString" value="false"/>
+      </types:properties>
+    </types:type>
+    <types:type name="excel" format="excel">
+      <types:shape format="weave"><![CDATA[%dw 2.0
+
+type excel = {|
+  cases?: Array<{|    name: String,     email: String,     source: String,     "case-type": String,     dob: String  |}>, 
+  contact?: Array<{|    email: String,     "first-name": String,     "last-name": String,     phone: String  |}>
+|}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#eb55d31c-0fcb-43c4-9ad1-ac3b725675a1">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="csv-covid"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#4a8ec545-8cb0-48d6-b7d8-e3b7dc555059">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="csv-covid"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="excel"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

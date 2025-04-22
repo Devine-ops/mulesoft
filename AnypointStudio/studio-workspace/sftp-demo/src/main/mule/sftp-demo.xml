@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:ftp="http://www.mulesoft.org/schema/mule/ftp"
+	xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd
+http://www.mulesoft.org/schema/mule/ftp http://www.mulesoft.org/schema/mule/ftp/current/mule-ftp.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<sftp:config name="SFTP_Config" doc:name="SFTP Config" doc:id="9cc82581-f5cc-4850-8c48-cbd63fa394e2" >
+		<sftp:connection workingDir="teste" host="us-east-1.sftpcloud.io" username="209fce068139411e9b0ccaf3e304d710" password="POqebpq6UwSKXZTB6ERLvrZilYptBFgy" />
+	</sftp:config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="095f21a6-9087-42c4-98c9-e91fd7d959d1" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="1234" database="teste-csv"/>
+	</db:config>
+	<flow name="sftp" doc:id="914a4045-507b-4f9e-a8bc-a2be06f1aeea" >
+		<sftp:listener doc:name="On New or Updated File" doc:id="cb1e0709-cea6-4625-b7bc-495f0423246a" config-ref="SFTP_Config" directory="new" moveToDirectory="processed" renameTo='#["cvd-cases" ++ now() as String ++ ".csv"]'>
+			<scheduling-strategy >
+				<fixed-frequency />
+			</scheduling-strategy>
+		</sftp:listener>
+		<logger level="INFO" doc:name="Logger" doc:id="c7422c42-f30d-481b-8128-8b2a0ece0fc7" message="recived file" />
+		<ee:transform doc:name="Transform Message" doc:id="eb55d31c-0fcb-43c4-9ad1-ac3b725675a1" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map (payload1, index) ->
+{
+	source: payload1.source,
+	caseType: payload1."case-type",
+	firstName: payload1."last-name",
+	phone: payload1.phone,
+	email: payload1.email,
+	dob: payload1.dob,
+	nationalId: payload1."national-id",
+	address:{
+		streetAddress: payload1."street-address",
+		city: payload1.city,
+		state: payload1.state,
+		country: payload1.country
+	}
+	
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		
+		<logger level="INFO" doc:name="Logger" doc:id="07fa7496-1db8-4b0d-8893-3b5020dda8dc" message="#[payload]"/>
+	</flow>
+</mule>
