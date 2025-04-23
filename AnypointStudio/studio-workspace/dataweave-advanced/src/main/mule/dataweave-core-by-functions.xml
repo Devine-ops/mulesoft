@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="dataweave-core-by-functionsFlow" doc:id="17959734-1fb7-46b1-83a8-1fbf185ab85b" >
+		<ee:transform doc:name="Transform Message" doc:id="1b75dda5-eab0-478f-a78f-e8e3df27c61e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+
+var numberArray = [0, 1, 2, 3, 3, 2, 1, 4]
+
+var covidObjectArray = [
+{
+  "firstName": "John",
+  "lastName": "Nix",
+  "phone": "541-754-3010",
+  "email": "john@gmail.com",
+  "caseType": "positive"
+},
+{
+  "firstName": "Mike",
+  "lastName": "Tyson",
+  "phone": "789-655-3878",
+  "email": "john@gmail.com",
+  "caseType": "recovered"
+},
+{
+  "firstName": "Jake",
+  "lastName": "Vend",
+  "phone": "655-789-2345",
+  "email": "jake@yahoo.com",
+  "caseType": "positive"
+}
+]
+
+---
+{
+	
+	"a": numberArray distinctBy $,
+	"b": numberArray distinctBy(v, index) -> v,
+	"c": covidObjectArray distinctBy $.email,
+	"d": covidObjectArray distinctBy(v, index) -> v.email,
+	"e": numberArray orderBy $,
+	"f": numberArray orderBy(v,i) -> (-v),
+	"g": covidObjectArray orderBy $.caseType,
+	"h": covidObjectArray orderBy(v,i) -> v.caseType,
+	"i": numberArray groupBy $,
+	"j": numberArray groupBy(v, index) -> v,
+	"k": covidObjectArray groupBy $.caseType,
+	"l": covidObjectArray groupBy(v, index) -> v.caseType,
+	"m": numberArray joinBy "-",
+	"n": covidObjectArray.caseType joinBy ","
+	
+	
+	
+	
+	
+	
+	
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

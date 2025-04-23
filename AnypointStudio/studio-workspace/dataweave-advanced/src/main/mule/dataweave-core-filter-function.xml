@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="dataweave-core-filter-function" doc:id="5988e4b7-9ce2-45fc-900a-5552c08b3c5b" >
+		<ee:transform doc:name="Transform Message" doc:id="90115c07-c1ea-4934-8e8d-61114713a229" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+
+var numberArray = [9,2,3,4,5]
+
+var covidObjectArray = [
+{
+  "firstName": "John",
+  "lastName": "Nix",
+  "phone": "541-754-3010",
+  "email": "john@gmail.com",
+  "caseType": "positive"
+},
+{
+  "firstName": "Jake",
+  "lastName": "Vend",
+  "phone": "655-789-2345",
+  "email": "jake@yahoo.com",
+  "caseType": "positive"
+},
+{
+  "firstName": "Mike",
+  "lastName": "Tyson",
+  "phone": "789-655-3878",
+  "email": "mike@gmail.com",
+  "caseType": "Recovered"
+} 
+]
+---
+{
+	"a": numberArray filter($ > 3),
+	
+	"b": numberArray filter(v, i) -> v > 3,
+	
+	"c": covidObjectArray filter($.caseType == "positive"),
+	
+	"d": covidObjectArray filter(covidPayload, indexOfCovidPayload) -> covidPayload.caseType == "Recovered"	
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

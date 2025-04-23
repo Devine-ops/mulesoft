@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="dataweave-core-of-functionsFlow" doc:id="3c2b29fe-55d8-4d57-a194-49a81e7e20a7" >
+		<ee:transform doc:name="Transform Message" doc:id="b63fb3ac-7f93-4177-b84e-60a00392b4f8" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var name="Chinna"
+var caseTypes=["positive", "recovered", "positive"]
+var covidObject = {
+  "firstName": "Mike",
+  "lastName": "Tyson",
+  "phone": "789-655-3878",
+  "email": "mike@gmail.com"
+}
+var covidObjectArray = [
+{
+  "firstName": "John",
+  "lastName": "Nix",
+  "phone": "541-754-3010",
+  "email": "john@gmail.com"
+},
+{
+  "firstName": "Jake",
+  "lastName": "Vend",
+  "phone": "655-789-2345",
+  "email": "jake@yahoo.com"
+}
+]
+---
+{
+	"sizeOf-FieldLevel": sizeOf(name),
+	"sizeOf-ArrayLevel": sizeOf(caseTypes),
+	"sizeOf-ObjectLevel": sizeOf(covidObject),
+	"sizeOf-ArrayOfObjectLevel": sizeOf(covidObjectArray),
+	"typeOf-FieldLevel": typeOf(name),
+	"typeOf-ArrayLevel": typeOf(caseTypes),
+	"typeOf-ObjectLevel": typeOf(covidObject),
+	"typeOf-ArrayOfObjectLevel": typeOf(covidObjectArray),
+	"namesOfObject": namesOf(covidObject),
+	"keysOfObject": keysOf(covidObject),
+	"valuesOfObject": valuesOf(covidObject),
+	"indexOf-ArrayLevelSyntax1": indexOf(caseTypes, "positive"),
+	"indexOf-ArrayLevelSyntax2": caseTypes indexOf "recovered",
+	"lastIndexOf-ArrayLevel": lastIndexOf(caseTypes, "positive"),
+	"entriesOfObject": entriesOf(covidObject),
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="dataweave-core-flatten-and-flatMap-functionsFlow" doc:id="51382a54-f542-4814-9155-f5f8e82f4bf0" >
+		<ee:transform doc:name="Transform Message" doc:id="da0d99e1-e740-448c-afd4-c72351e83180" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var numberArray = [2,3,4]
+var stringArray = ["Mule","ESB"]
+var covidObjectArray1 = [{
+	"firstName": "John",
+	"lastName": "Nix",
+	"phone": "541-754-3010",
+	"email": "john@gmail.com",
+	"caseType": "positive"
+},
+{
+	"firstName": "Jake",
+	"lastName": "Vend",
+	"phone": "655-789-2345",
+	"email": "jake@yahoo.com",
+	"caseType": "positive"
+}]
+var covidObjectArray2 = [{
+	"firstName": "Mike",
+	"lastName": "Tyson",
+	"phone": "789-655-3878",
+	"email": "mike@gmail.com",
+	"caseType": "recovered"
+}]
+---
+{
+	
+	"a": flatten(numberArray + stringArray),
+	"b": flatten(covidObjectArray1 + covidObjectArray2) map $.firstName,
+	"c": (covidObjectArray1 + covidObjectArray2) flatMap $
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

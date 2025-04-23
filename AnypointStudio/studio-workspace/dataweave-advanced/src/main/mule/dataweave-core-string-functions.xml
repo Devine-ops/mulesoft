@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="dataweave-core-string-functions" doc:id="6461ac15-bac4-4c1f-9c46-0245b8c54da9" >
+		<ee:transform doc:name="Transform Message" doc:id="2c6a25e2-899a-402c-8817-87c48be81e6c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var name = "Chinna"
+---
+{
+	"contains example": "mulesoft" contains("mule"),
+	"find example": "aabccdbceaa" find "a",
+	"isBlank example": isBlank("hello"),
+	"isEmpty example array": isEmpty([1, 2, 3]),
+	"isEmpty example string": isEmpty(null),
+	"empName": if(! isEmpty(name)) name else "Not provided",
+	"lower example": lower("MULESOFTesb"),
+	"upper example": upper("MULEesb"),
+	"matches example": "me@mulesoft.com" matches(/([a-z]*)@([a-z]*).com/),
+	"replace example": "admin123" replace "123" with("ID"),
+	"splitBy example": ("a-b-c" splitBy("-")),
+	"startsWith example": "Mariano" startsWith("Mar"),
+	"endsWith example": "Mariano" endsWith("no"),
+	"trim example": trim("   my really long  text     ")
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

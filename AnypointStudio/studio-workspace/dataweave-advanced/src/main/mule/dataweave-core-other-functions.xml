@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="dataweave-core-other-functions" doc:id="1eb2bf18-5ca5-4d68-9331-9f3f4e5e4abb" >
+		<ee:transform doc:name="Transform Message" doc:id="17f19957-402f-48ac-90e8-fcbce3d5c6d5" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var numberArray = [2,3,4]
+var stringArray = ["Mule","ESB"]
+var mixedArray = [ [0,"a"], [1,"b"], [2,"c"],[ 3,"d"] ]
+var covidObject = {
+  "firstName": "Mike",
+  "lastName": "Tyson",
+  "phone": "789-655-3878",
+  "email": "mike@gmail.com"
+}
+var covidObjectArray1 = [{
+	"firstName": "John",
+	"lastName": "Nix",
+	"phone": "541-754-3010",
+	"email": "john@gmail.com",
+	"caseType": "positive"
+},
+{
+	"firstName": "Jake",
+	"lastName": "Vend",
+	"phone": "655-789-2345",
+	"email": "jake@yahoo.com",
+	"caseType": "positive"
+}]
+---
+{
+	"++ ex1": numberArray ++ stringArray,
+	"++ ex2": covidObject ++ {"caseType": "positive"},
+	"++ ex3": stringArray[0] ++ " " ++ stringArray[1],
+	"-- ex1": numberArray -- [4],
+	"-- ex2": covidObject -- {"phone": "789-655-3878"},
+	"pluck ex-keys": covidObject pluck $$,
+	"pluck ex-values": covidObject pluck $,
+	"pluck ex-indexes": covidObject pluck $$$,
+	"to-ex": 1 to 10,
+	"uuid-ex": uuid(),
+	"zip-ex": zip(numberArray, stringArray),
+	"unzip-ex": unzip(mixedArray)
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

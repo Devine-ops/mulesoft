@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="dataweave-core-map-function" doc:id="235efb42-0a7f-4c19-a12a-02dad72cbb31" >
+		<ee:transform doc:name="Transform Message" doc:id="b20156a1-b5a6-419a-bade-7e5788559611" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+
+var caseTypes=["positive", "recovered", "negative"]
+
+var covidObjectArray = [
+{
+  "firstName": "John",
+  "lastName": "Nix",
+  "phone": "541-754-3010",
+  "email": "john@gmail.com"
+},
+{
+  "firstName": "Jake",
+  "lastName": "Vend",
+  "phone": "655-789-2345",
+  "email": "jake@yahoo.com"
+}
+]
+---
+{
+	"a": caseTypes map {
+		($$): $
+	},
+	"b": caseTypes map(caseType, indexOfCaseType) -> {
+		(indexOfCaseType): caseType
+	},
+	"c": covidObjectArray map {
+		($$): $
+	},
+	"d": covidObjectArray map(covidPayload, indexOfCovidPayload) -> {
+		(indexOfCovidPayload): covidPayload
+	},
+	"e": covidObjectArray map(covidPayload, indexOfCovidPayload) -> {
+		"fullName": covidPayload.firstName ++ " " ++ covidPayload.lastName,
+		"phone": covidPayload.phone,
+		"email": covidPayload.email
+		}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="dataweave-core-filter-map-together" doc:id="338480f4-69d3-49be-bea7-9f94a6ffb637" >
+		<ee:transform doc:name="Transform Message" doc:id="9f722e03-7ae4-48c9-bac1-2b0f6c8e499c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+
+var covidObjectArray = [
+{
+  "firstName": "John",
+  "lastName": "Nix",
+  "phone": "541-754-3010",
+  "email": "john@gmail.com",
+  "caseType": "positive"
+},
+{
+  "firstName": "Jake",
+  "lastName": "Vend",
+  "phone": "655-789-2345",
+  "email": "jake@yahoo.com",
+  "caseType": "positive"
+},
+{
+  "firstName": "Mike",
+  "lastName": "Tyson",
+  "phone": "789-655-3878",
+  "email": "mike@gmail.com",
+  "caseType": "recovered"
+} 
+]
+
+---
+{
+	
+	"covidCases": covidObjectArray filter($.caseType == "recovered")  map(covidPayload, indexOfCovidPayload) -> {
+		"fullName": covidPayload.firstName ++ " " ++ covidPayload.lastName,
+		"phoneNumber": covidPayload.phone,
+		"emailAddress": covidPayload.email,
+		"covidCaseType": covidPayload.caseType
+}
+	
+	
+	
+	
+	
+	
+	
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

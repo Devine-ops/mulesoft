@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="dataweave-core-filterObject-function" doc:id="085005bc-a018-482a-80f0-afaea9b8030b" >
+		<ee:transform doc:name="Transform Message" doc:id="e5c0ca7b-b511-45bd-bfc6-8d10d12c2167" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+
+var covidObject = {
+  "firstName": "John",
+  "lastName": "Nix",
+  "phone": "",
+  "email": null,
+  "caseType": "positive"
+}
+
+---
+{
+	"a": covidObject filterObject(! isEmpty($)),
+	
+	"b": covidObject filterObject(v, k, i) -> (! isEmpty(v))
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
