@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<covidCase>
+    <source>Hospital1</source>
+    <firstName>João</firstName>
+    <lastName>Silva</lastName>
+    <phone>+55 11 91234-5678</phone>
+    <email>joao.silva@email.com</email>
+    <dateOfBirth>1990-05-15</dateOfBirth>
+    <nationalID>123456789</nationalID>
+    <nationalIDType>RG</nationalIDType>
+    <address>
+        <streetAddress>Rua das Flores, 123</streetAddress>
+        <city>São Paulo</city>
+        <state>SP</state>
+        <postal>01000-000</postal>
+        <country>Brasil</country>
+    </address>
+</covidCase>

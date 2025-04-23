@@ -1,0 +1,18 @@
+{
+    "source":"APC",
+    "caseType": "positive",
+    "firstName": "João",
+    "lastName": "Silva",
+    "phone": "+55 11 91234-5678",
+    "email": "joao.silva@email.com",
+    "dateOfBirth": "1990-05-15",
+    "nationalID": "123456789",
+    "nationalIDType": "RG",
+    "address": {
+      "streetAddress": "Rua das Flores, 123",
+      "city": "São Paulo",
+      "state": "SP",
+      "postal": "010020-000",
+      "country": "Brasil"
+    }
+  }

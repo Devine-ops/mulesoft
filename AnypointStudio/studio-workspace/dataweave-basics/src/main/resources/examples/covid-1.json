@@ -1,0 +1,137 @@
+[
+{
+    "source":APC,
+    "caseType": positive,
+    "firstName": "João",
+    "lastName": "Silva",
+    "phone": "+55 11 91234-5678",
+    "email": "joao.silva@email.com",
+    "dateOfBirth": "1990-05-15",
+    "nationalID": "123456789",
+    "nationalIDType": "RG",
+    "address": {
+      "streetAddress": "Rua das Flores, 123",
+      "city": "São Paulo",
+      "state": "SP",
+      "postal": "010020-000",
+      "country": "Brasil"
+    }
+},
+
+{
+    "source":BPC,
+    "caseType": positive,
+    "firstName": "João",
+    "lastName": "Silva",
+    "phone": "+55 11 91234-5678",
+    "email": "joao.silva@email.com",
+    "dateOfBirth": "1990-05-15",
+    "nationalID": "123456789",
+    "nationalIDType": "RG",
+    "address": {
+      "streetAddress": "Rua das Flores, 123",
+      "city": "São Paulo",
+      "state": "SP",
+      "postal": "010070-000",
+      "country": "Brasil"
+    }
+},
+
+
+{
+    "source":CPC,
+    "caseType": positive,
+    "firstName": "João",
+    "lastName": "Silva",
+    "phone": "+55 11 91234-5678",
+    "email": "joao.silva@email.com",
+    "dateOfBirth": "1990-05-15",
+    "nationalID": "123456789",
+    "nationalIDType": "RG",
+    "address": {
+      "streetAddress": "Rua das Flores, 123",
+      "city": "São Paulo",
+      "state": "SP",
+      "postal": "01000-8000",
+      "country": "Brasil"
+    }
+},
+
+{
+    "source":DPC,
+    "caseType": positive,
+    "firstName": "João",
+    "lastName": "Silva",
+    "phone": "+55 11 91234-5678",
+    "email": "joao.silva@email.com",
+    "dateOfBirth": "1990-05-15",
+    "nationalID": "123456789",
+    "nationalIDType": "RG",
+    "address": {
+      "streetAddress": "Rua das Flores, 123",
+      "city": "São Paulo",
+      "state": "SP",
+      "postal": "010800-000",
+      "country": "Brasil"
+    }
+},
+
+{
+    "source":EPC,
+    "caseType": positive,
+    "firstName": "João",
+    "lastName": "Silva",
+    "phone": "+55 11 91234-5678",
+    "email": "joao.silva@email.com",
+    "dateOfBirth": "1990-05-15",
+    "nationalID": "123456789",
+    "nationalIDType": "RG",
+    "address": {
+      "streetAddress": "Rua das Flores, 123",
+      "city": "São Paulo",
+      "state": "SP",
+      "postal": "010300-000",
+      "country": "Brasil"
+    }
+},
+
+{
+    "source":FPC,
+    "caseType": positive,
+    "firstName": "João",
+    "lastName": "Silva",
+    "phone": "+55 11 91234-5678",
+    "email": "joao.silva@email.com",
+    "dateOfBirth": "1990-05-15",
+    "nationalID": "123456789",
+    "nationalIDType": "RG",
+    "address": {
+      "streetAddress": "Rua das Flores, 123",
+      "city": "São Paulo",
+      "state": "SP",
+      "postal": "010050-000",
+      "country": "Brasil"
+    }
+},
+
+{
+    "source":GPC,
+    "caseType": positive,
+    "firstName": "João",
+    "lastName": "Silva",
+    "phone": "+55 11 91234-5678",
+    "email": "joao.silva@email.com",
+    "dateOfBirth": "1990-05-15",
+    "nationalID": "123456789",
+    "nationalIDType": "RG",
+    "address": {
+      "streetAddress": "Rua das Flores, 123",
+      "city": "São Paulo",
+      "state": "SP",
+      "postal": "021000-000",
+      "country": "Brasil"
+    }
+},
+
+
+]

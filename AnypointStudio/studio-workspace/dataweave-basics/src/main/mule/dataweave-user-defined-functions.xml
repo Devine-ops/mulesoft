@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="dataweave-user-defined-functions" doc:id="18c5680a-1ec5-4383-99cc-468cf71dd18e" >
+		<ee:transform doc:name="Transform Message" doc:id="a0ec91f8-6e81-47d3-8a37-e338e54f94b1" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var name="Chinna"
+
+fun fullName() = "Chinna Reddy" //no. of params, type params & order of params
+
+fun fullName(firstName: String, lastName: String): String = firstName ++ " " ++ lastName
+
+fun fullName(firstName: String, middleName: String, lastName: String): String = firstName ++ " " ++ middleName ++ " " ++ lastName
+
+fun fullName(firstName: String, middleName: Number, lastName: String): String = firstName ++ " " ++ middleName ++ " " ++ lastName
+
+fun fullName(firstName: Number, middleName: String, lastName: String): String = firstName ++ " " ++ middleName ++ " " ++ lastName
+---
+{
+	"a": fullName(),
+	"b": fullName("Chinna", "Reddy"),
+	"c": fullName("Chinna", "sa", "Reddy")
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

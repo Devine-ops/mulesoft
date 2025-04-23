@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="dataweave-pattern-matching" doc:id="89c99313-7b9f-47e2-9840-da93a2ce9726" >
+		<ee:transform doc:name="Transform Message" doc:id="e1f6cf28-1e78-414c-8a22-0cbdfa98fd7d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+
+var covidObject = {
+  "firstName": "Mike",
+  "lastName": "Tyson",
+  "phone": "789-655-3878",
+  "email": "",
+  "caseType": "Recovered"
+} 
+
+---
+{
+  "firstName": covidObject.firstName,
+  "lastName": covidObject.lastName,
+  "phone": covidObject.phone,
+  "email": covidObject.email,
+  "caseType-if-else": if(covidObject.caseType == "positive") "POS" else if(covidObject.caseType == "Recovered") "REC" else "",
+  "caseType-match": covidObject.caseType match {
+  	case "positive" -> "POS"
+  	case "Recovered" -> "REC"
+  	else -> ""
+  }
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
