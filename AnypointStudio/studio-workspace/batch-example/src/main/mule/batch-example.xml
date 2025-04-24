@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
+	<flow name="batch-exampleFlow" doc:id="8a6853e4-fdec-45db-9cd7-0f4d0cfe81ba" >
+		<file:listener doc:name="On New or Updated File" doc:id="e34f8044-db4e-4d17-b74b-2a143d124295" directory='C:\Users\Global Red 1\Desktop\new' autoDelete="true" recursive="false">
+			<scheduling-strategy >
+				<fixed-frequency />
+			</scheduling-strategy>
+		</file:listener>
+		<batch:job jobName="batch-exampleBatch_Job" doc:id="8207fae4-fdea-4c69-9f9c-8f7f4a0cb5da" blockSize="3">
+			<batch:process-records >
+				<batch:step name="Batch_Step" doc:id="c9127685-6363-426f-b389-d91d016a48aa" acceptPolicy="ALL">
+					<logger level="INFO" doc:name="Logger" doc:id="a2cb6108-b527-42d7-adb3-4f25cc45dfc9" message="ste 1 *************************#[payload]"/>
+				</batch:step>
+			</batch:process-records>
+		</batch:job>
+	</flow>
+</mule>
