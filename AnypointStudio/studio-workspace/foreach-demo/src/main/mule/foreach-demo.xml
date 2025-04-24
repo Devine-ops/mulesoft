@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="58da01cc-556d-4c5a-a35d-6cd29542d514" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="564a93c7-c5c7-490e-a698-67d33f5c9216" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="Tiger@1234" />
+	</db:config>
+	<flow name="foreach-demoFlow" doc:id="6d8d2649-28bc-40df-aea8-022396b223e8" >
+		<http:listener doc:name="Listener" doc:id="5f98ac1b-491e-4b0a-b732-695c5fd316fe" config-ref="HTTP_Listener_config" path="/foreach-demo"/>
+		<logger level="INFO" doc:name="Start Log" doc:id="66303791-9b55-4001-8a78-dc8a14df69a6" message="Started flow"/>
+		<set-variable value="#[[]]" doc:name="Set Variable" doc:id="bd408f14-752a-4340-b0c1-d11cd922d0f8" variableName="employeeList"/>
+		<db:select doc:name="Select EMP_MASTER" doc:id="dd3b59cf-ded7-4e84-8440-f10e471980c8" config-ref="Database_Config">
+			<db:sql ><![CDATA[select emp_id, emp_name, emp_status from onboard.emp_master]]></db:sql>
+		</db:select>
+		<foreach doc:name="For Each" doc:id="758a25aa-8478-4407-bcdd-138ef9e52dd4" collection="#[payload]">
+			<logger level="INFO" doc:name="Logger" doc:id="33f26418-896e-4a03-a1b4-b28cb444ca8d" message="#[payload.emp_id]" />
+			<http:request method="GET" doc:name="Consume Finance Service" doc:id="4eae9783-9e4e-4bbe-b989-253ac141b5ff" url="https://emp-finance-api-9dg8k8.5sc6y6-4.usa-e2.cloudhub.io/employees/{id}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"id" : payload.emp_id
+}]]]></http:uri-params>
+		</http:request>
+			<ee:transform doc:name="Transform Message" doc:id="962824b2-d0f5-47e6-ab41-29c881565c59" >
+				<ee:message >
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="employeeList" ><![CDATA[%dw 2.0
+output application/java
+---
+vars.employeeList << {
+	emp_age: payload.'employee_age',
+	emp_salary: payload.'employee_salary',
+	emp_id: payload.id
+}]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</foreach>
+		<db:bulk-insert doc:name="Insert emp_fin_master" doc:id="c2b9df6f-97a4-4ad1-8a85-cc0031c63953" config-ref="Database_Config">
+			<db:bulk-input-parameters ><![CDATA[#[vars.employeeList]]]></db:bulk-input-parameters>
+			<db:sql ><![CDATA[insert into onboard.emp_fin_master(emp_id, emp_salary, emp_age) values(:emp_id, :emp_salary, :emp_age)]]></db:sql>
+		</db:bulk-insert>
+		<ee:transform doc:name="Set Response" doc:id="3b24099f-7064-463f-9577-b2ac39c1bbdd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"status": "200",
+	"message": "success"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="End Log" doc:id="69e37cfd-c76b-4131-bf34-118423d53cde" message="Completed flow"/>
+	</flow>
+</mule>
