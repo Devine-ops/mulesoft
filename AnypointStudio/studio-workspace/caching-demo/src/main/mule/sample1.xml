@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<flow name="sample1Flow" doc:id="3bbbfa58-d046-4167-bfbb-02f5aea5a5c2" >
+		<http:listener doc:name="Listener" doc:id="47c44afb-4445-44fa-8fdc-b88ca42b6f65" config-ref="HTTP_Listener_config" path="/sample1"/>
+		<os:retrieve doc:name="Retrieve" doc:id="e3a991e5-7308-435a-9980-17ad4a1b373e" key="LookUpData" objectStore="Object_store"/>
+		<logger level="INFO" doc:name="Logger" doc:id="9e331e70-0041-4786-827e-31b4150e5250" message="#[payload]"/>
+	</flow>
+</mule>
