@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:api-p-cobrancas-asaas="http://www.mulesoft.org/schema/mule/api-p-cobrancas-asaas"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/api-p-cobrancas-asaas http://www.mulesoft.org/schema/mule/api-p-cobrancas-asaas/current/mule-api-p-cobrancas-asaas.xsd">
+	<http:listener-config name="api-cobrancas-asaas-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="api-e-cobrancas-asaas-config" api="resource::68280e3a-b385-48bb-8dba-44982a379876:api-cobrancas-asaas:1.0.4:raml:zip:api-cobrancas-asaas.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	<api-p-cobrancas-asaas:config name="Api_p_cobrancas_asaas_Config1" doc:name="Api-p-cobrancas-asaas Config" doc:id="a5e94f17-3849-4027-8229-35db3bb2b334" />
+    
+	
+</mule>
