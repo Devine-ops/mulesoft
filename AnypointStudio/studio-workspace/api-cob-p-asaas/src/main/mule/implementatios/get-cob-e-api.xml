@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:api-s-cobrancas-asaas="http://www.mulesoft.org/schema/mule/api-s-cobrancas-asaas" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/api-s-cobrancas-asaas http://www.mulesoft.org/schema/mule/api-s-cobrancas-asaas/current/mule-api-s-cobrancas-asaas.xsd">
+	<sub-flow name="get-cob-e-apiSub_Flow" doc:id="3ef20e4c-0850-4c46-9816-b9faf4eafb16" >
+		<api-s-cobrancas-asaas:consultar-cobrana doc:name="Consultar Cobrança" doc:id="4e5bb7d7-a890-4c43-b701-61a69b2621f6" config-ref="Api_s_cobrancas_asaas_Config" access-token="#[attributes.headers.access_token]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="cc753014-77de-4f16-9eba-92e9ef31749d" message="Final camada processamento" />
+	
+</sub-flow>
+</mule>
