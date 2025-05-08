@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<sub-flow name="get-cob-e-apiSub_Flow" doc:id="3ef20e4c-0850-4c46-9816-b9faf4eafb16" >
+		<http:request method="GET" doc:name="Request" doc:id="d0ac14f2-089d-423d-876b-961bb1386a4a" config-ref="HTTP_Request_configuration" path="/v3/payments">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	access_token : attributes.headers.access_token
+}]]]></http:headers>
+		</http:request>
+		<logger level="INFO" doc:name="Logger" doc:id="1031e0a2-f1de-4db7-8b5e-90000ae45170" message="Final Sistema"/>
+	
+</sub-flow>
+</mule>
