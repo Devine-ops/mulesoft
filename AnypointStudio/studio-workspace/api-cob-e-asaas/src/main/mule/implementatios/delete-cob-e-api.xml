@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:api-p-cobrancas-asaas="http://www.mulesoft.org/schema/mule/api-p-cobrancas-asaas" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/api-p-cobrancas-asaas http://www.mulesoft.org/schema/mule/api-p-cobrancas-asaas/current/mule-api-p-cobrancas-asaas.xsd">
+	<sub-flow name="delete-cob-e-apiSub_Flow" doc:id="3ef20e4c-0850-4c46-9816-b9faf4eafb16" >
+		<api-p-cobrancas-asaas:excluir-cobrana doc:name="Excluir Cobrança" doc:id="f3c10c1b-8e0f-4141-9ff7-b226de8f593b" config-ref="Api_p_cobrancas_asaas_Config1" id="#[attributes.uriParams.id]" access-token="#[attributes.headers.access_token]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="3858dfab-0439-4956-8ecf-da3538d63d73" message="Experiencia "/>
+	
+</sub-flow>
+</mule>

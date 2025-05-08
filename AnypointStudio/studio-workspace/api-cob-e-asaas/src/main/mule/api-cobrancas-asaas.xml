@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    
+    <flow name="api-cobrancas-asaas-main">
+        <http:listener config-ref="api-cobrancas-asaas-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="api-e-cobrancas-asaas-config" />
+		<error-handler ref="Error_Handler_ApiKit" />
+       
+    </flow>
+    <flow name="api-cobrancas-asaas-console">
+        <http:listener config-ref="api-cobrancas-asaas-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="api-e-cobrancas-asaas-config" />
+		<error-handler ref="Error_Handler_ApiKit_Console" />
+        
+    </flow>
+    <flow name="put:\v3\payments\(id):application\json:api-e-cobrancas-asaas-config">
+        <ee:transform doc:name="Transform Message">
+            <ee:variables>
+                <ee:set-variable variableName="id">attributes.uriParams.'id'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="f50e5dd4-0fde-4c41-8da6-1aabeeb4e516" name="put-cob-e-apiSub_Flow"/>
+		<error-handler ref="Error_Handler_ApiKit" />
+    
+</flow>
+    <flow name="delete:\v3\payments\(id):api-e-cobrancas-asaas-config">
+        <ee:transform doc:name="Transform Message">
+            <ee:variables>
+                <ee:set-variable variableName="id">attributes.uriParams.'id'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="937ab985-7a17-4b59-911f-1230d5ac64fa" name="delete-cob-e-apiSub_Flow"/>
+    
+</flow>
+    <flow name="get:\v3\payments:api-e-cobrancas-asaas-config">
+		<logger level="INFO" doc:name="Logger" doc:id="730b863d-23df-4b35-a616-a28d0b5a0748" message="Camada de Experiência "/>
+		<flow-ref doc:name="Flow Reference" doc:id="aeac8722-989b-4393-be0e-7bc14c952ca3" name="get-cob-e-apiSub_Flow"/>
+    
+</flow>
+    <flow name="post:\v3\payments:application\json:api-e-cobrancas-asaas-config">
+		<flow-ref doc:name="Flow Reference" doc:id="7383c720-db71-4eaf-8cf7-22f36af0818a" name="create-cob-e-apiSub_Flow"/>
+    </flow>
+</mule>
